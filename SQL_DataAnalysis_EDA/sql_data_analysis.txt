@@ -1,0 +1,147 @@
+Client : ios app developer 
+
+needs insights to wht type of app to build
+
+wht app categories are most popular 
+sould my app be paid or free 
+how can i maximize user ratings
+
+
+
+Final Recommendations : 
+1.Paid apps have better ratings
+2.apps supporting 10 to 30 languages have better ratings
+3.finance and book apps have low ratings
+4.apps with longer description have better ratings
+5.new app should have a rating higher than 3.5 
+6.games and entertainment have hight competition 
+
+
+
+USE csv;
+-- EDA
+
+-- checking number of unique apps in both datasets
+
+SELECT COUNT(DISTINCT id) AS UniqueAppIDs 
+FROM AppleStore ; 
+
+SELECT COUNT(DISTINCT id) AS UniqueAppIDs 
+FROM appleStore_description ;
+
+-- checking for missing values in key fields
+
+SELECT COUNT(*) AS Missing_values 
+FROM  AppleStore
+WHERE track_name is null OR user_rating is null OR prime_genre is null ;
+
+SELECT COUNT(*) AS Missing_values 
+FROM  appleStore_description
+WHERE app_desc is null ;
+
+-- Finding out number of apps per genre 
+
+SELECT COUNT(*) AS apps,prime_genre 
+FROM AppleStore
+GROUP BY prime_genre
+ORDER BY apps DESC ;
+
+-- overview App ratings
+
+SELECT min(user_rating) as Minrating,
+	   max(user_rating) as Maxrating,
+	   avg(user_rating) as avgrating
+FROM AppleStore
+
+
+
+-- Supported devices
+
+SELECT min(sup_devices_num),
+	   max(sup_devices_num),
+	   avg(sup_devices_num)
+FROM AppleStore
+
+SELECT count(track_name) AS Apps,
+		CASE 
+    WHEN sup_devices_num >= 34 THEN 'high'
+    WHEN sup_devices_num > 16 THEN 'mid'
+    ELSE 'low'
+  END AS Devicesupport
+FROM AppleStore
+GROUP BY 
+CASE 
+    WHEN sup_devices_num >= 34 THEN 'high'
+    WHEN sup_devices_num > 16 THEN 'mid'
+    ELSE 'low'
+	END
+ORDER BY Apps DESC 
+
+
+
+
+
+-- DATA ANALYSIS		
+
+-- ranking of paid apps vs free apps
+-- chechking if paid apps have higher rating than free apps
+
+SELECT CASE
+			WHEN price > 0 THEN 'Paid'
+			ELSE 'Free'
+		END AS App_Type,
+		avg(user_rating) AS Avg_Rating,
+		COUNT(track_name) AS Number_of_Apps
+FROM AppleStore
+GROUP BY 
+		CASE
+			WHEN price > 0 THEN 'Paid'
+			ELSE 'Free'
+		END 
+
+-- language supported and rating
+-- checking if apps with higher language support have higher user ratings
+
+SELECT CASE
+		   WHEN lang_num < 10 THEN '<10 languages'
+		   WHEN lang_num BETWEEN 10 AND 30  THEN '10 - 30 languages'
+		   ElSE '>30 languages'
+		   END as Language_Bucket,
+			avg(user_rating) as Avg_Rating
+FROM AppleStore
+GROUP BY CASE
+		   WHEN lang_num < 10 THEN '<10 languages'
+		   WHEN lang_num BETWEEN 10 AND 30  THEN '10 - 30 languages'
+		   ElSE '>30 languages'
+		   END
+ORDER BY Avg_Rating DESC
+
+
+-- checking genres with  least rating
+
+SELECT prime_genre ,COUNT(track_name) as Apps  ,AVG(user_rating) as Average_Rating
+FROM AppleStore
+GROUP BY prime_genre
+ORDER BY Average_Rating
+
+
+
+-- Checking if there is correlation Between the length of the app_desc and user_raing
+
+SELECT CASE 
+			WHEN LEN(b.app_desc) <= 500 THEN 'Short'
+			WHEN LEN(b.app_desc) BETWEEN 500 AND 1000 THEN 'Medium'
+			ELSE 'Long'
+			END AS desc_length_bucket,
+			avg(a.user_rating) AS Avg_Rating
+FROM AppleStore  a 
+JOIN appleStore_description  b 
+ON a.id = b.id
+GROUP BY CASE 
+			WHEN LEN(b.app_desc) <= 500 THEN 'Short'
+			WHEN LEN(b.app_desc) BETWEEN 500 AND 1000 THEN 'Medium'
+			ELSE 'Long'
+			END
+ORDER BY Avg_Rating DESC
+
+
