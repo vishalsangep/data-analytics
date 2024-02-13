@@ -1,0 +1,13 @@
+populated cusname ,email,etc from other sheets using vlookup
+used switch case to make abrrivations into meaningful names
+changed month from american format to a more genral format dd-mmm-yyyy
+size column formmated from (0.0) to(0.0 kg)
+added currency format to unit size and sales column
+checked for duplicates --no duplicates found
+
+
+ Dash board vizual 1
+inserted pivot table 
+order date by sales by coffe type
+added time line to it 
+added slicer
