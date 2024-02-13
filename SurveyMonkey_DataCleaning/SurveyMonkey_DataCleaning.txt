@@ -1,0 +1,25 @@
+data cleaninig for visualizations in Bi tools
+respondents per question
+same ansewer per question
+
+merged rows in excel
+dropped columns in python
+melted/unpivoted dataframe from wide format to long format
+calculated respondents per question
+calculated answers per question 
+
+Importing Dataset
+Created a copy of our dataset incase we need to revert back
+Dropping columns we dont need
+Unpivoting our dataframe
+Created a Seperate column which only contains Questions
+Finding number of people responded for a question
+Finding Number of people gave same answer per question
+Filling Nan with 0 in Same Answer Cloumn
+Renaming column Headers
+Combining Divsion primary and Division Secondary Columns
+Cross checked :-
+two people ansered as "other(specify)" = 2  
+total quetion+subqutions = 86   
+2*86 = 172
+Exporting to excel file
